@@ -1,8 +1,8 @@
 # EDA093_OperatingSystems
 
-##Tests
+## Tests
 
-###Simple Commands
+### Simple Commands
 
 + date: Day Month Time Time-zone Year
 + hello: No such file or directory. A child process is never created since thers is no program in the programlist.
@@ -11,18 +11,18 @@
 
 Both commands is printed on a new line in the shell. 
 
-###Commands with parameters
+### Commands with parameters
 
 + ls -al -p: It shows the total number of files recursivily in each of the directories in the current directory.
 + ls parse*: Works in a normal terminal but in out shell it prints 'ls: parse*: No such file or directory'
 
-###Redirections with in and out files
+### Redirections with in and out files
 
 + ls -al > tmp.1: No response, however the file 'tmp.1' is created with the info from ls -al.
 + cat < tmp.1 > tmp.2: The input from ls -al is moved from tmp.1 to tmp.2. Cat creates a child.
 + diff tmp.1 tmp.2: Since the previous commands moved the output to tmp.2 it differs with all lines.
 
-###Running background programs
+### Running background programs
 
 + emacs &: Create a child for emacs but tou're still able to write in the shell
 + emacs &: Does the same as above but creates another child.
@@ -30,7 +30,7 @@ Both commands is printed on a new line in the shell.
 + ps: By running the command several times, we can use 'kill' to kill the process and not leaving any zombies.
 But with xkill, we get stuck in the while loop that collect the return values of the children.
 
-###Process communications
+### Process communications
 
 + ls -al | wc: It shows the a list of all the files with the word count flag and then the prompt appears on next line.
 + ls | sort -r: It sors the list reversed and also shows the prompt after the prompt.
@@ -42,7 +42,7 @@ But you get stuck in the cat command.
 + ls | abf: no such file or directory
 + grep apa | ls: Create a child for grep but get stuck in a loop. Doesn't display anything.
 
-###Built-in commands
+### Built-in commands
 
 + cd .. : 
 + cd lab1
