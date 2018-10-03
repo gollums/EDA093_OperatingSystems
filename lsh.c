@@ -66,6 +66,9 @@ int main(void)
   while (!done) {
 
     char *line;
+    /*
+    printf("%s", pwd);
+    */
     line = readline("> ");
 
     if (!line) {
@@ -148,7 +151,7 @@ stripwhite (char *string)
 {
   register int i = 0;
 
-  while (isspace( string[i] )) {
+  while (whitespace( string[i] )) {
     i++;
   }
   
@@ -157,7 +160,7 @@ stripwhite (char *string)
   }
 
   i = strlen( string ) - 1;
-  while (i> 0 && isspace (string[i])) {
+  while (i> 0 && whitespace (string[i])) {
     i--;
   }
 
@@ -170,8 +173,9 @@ void run_command(Command *cmd)
   int bg = cmd->bakground;
   char **pl = p->pgmlist;
   char *infile = cmd->rstdin;
-  char * outfile = cmd->rstdout;
-  int infd = STDIN_FILENO, outfd = STDOUT_FILENO;
+  char *outfile = cmd->rstdout;
+  int infd = STDIN_FILENO;
+  int outfd = STDOUT_FILENO;
   pid_t pid;
 
   if (0 == strcmp("exit", *pl)) {
@@ -182,10 +186,10 @@ void run_command(Command *cmd)
     getcwd(pwd, sizeof(pwd));
   } else {
       
-      if (outfd) {
+      if (outfile) {
 	outfd = creat(outfile, S_IWUSR | S_IRUSR);
       }
-      if (infd) {
+      if (infile) {
 	infd = open(infile, O_RDONLY);
       }
 
