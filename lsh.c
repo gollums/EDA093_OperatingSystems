@@ -66,9 +66,9 @@ int main(void)
   while (!done) {
 
     char *line;
-    /*
-    printf("%s", pwd);
-    */
+	  
+    printf("%s", pwd)
+	    
     line = readline("> ");
 
     if (!line) {
@@ -167,6 +167,9 @@ stripwhite (char *string)
   string [++i] = '\0';
 }
 
+/*
+ * Run the program with the command
+ */
 void run_command(Command *cmd)
 {
   Pgm *p = cmd->pgm;
@@ -178,6 +181,8 @@ void run_command(Command *cmd)
   int outfd = STDOUT_FILENO;
   pid_t pid;
 
+/* Below handles the commands that the user types */
+	
   if (0 == strcmp("exit", *pl)) {
     exit(EXIT_SUCCESS);
   } else if (0 == strcmp("cd", *pl)) {
@@ -208,12 +213,17 @@ void run_command(Command *cmd)
     }
 }
 
+/*
+ * Run recursivily, called from run_command
+ */
+
 void run_pgm_recursive(Pgm *p, int outfd){
   char **pl = p->pgmlist;
   pid_t pid;
   int pipefd[2];
 
-
+/* Pipes that uses the safe_pipe and checks wether it's a parent or child */
+	
   if((p->next) == NULL) {
     dup2(outfd,STDOUT_FILENO);
     if (-1 == execvp(*pl, pl)){
@@ -228,12 +238,12 @@ void run_pgm_recursive(Pgm *p, int outfd){
       perror(NULL);
     }
     if (0 == pid) {
-      /*CHILD*/
+      /* Child */
       close(pipefd[0]);
       run_pgm_recursive(p->next, pipefd[1]);
       exit(EXIT_SUCCESS);
     } else{
-      /*PARENT*/
+      /* Parent */
       close(pipefd[1]);
       waitpid(pid,NULL,0);
       dup2(outfd,STDOUT_FILENO);
@@ -247,6 +257,10 @@ void run_pgm_recursive(Pgm *p, int outfd){
 	    
 }
 
+/*
+ * To handle the pipes safely
+ */
+
 void safe_pipe(int *pipefd){
   if (-1 == pipe(pipefd)){
     perror(NULL);
@@ -254,12 +268,19 @@ void safe_pipe(int *pipefd){
   return;
 }
 
+/*
+ * Handler for signals
+ */
+
 void sigint_handler(int signo){
   if (signo == SIGINT) {
     printf("\n%s> ", pwd);
   }
 }
 
+/*
+ * Handler for the signals of child
+ */
 void sigchld_handler(int signo){
   if (signo == SIGCHLD) {
     waitpid(-1, NULL, WNOHANG);
