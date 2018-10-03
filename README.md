@@ -58,3 +58,8 @@ No error is generated.??? built-in ???
 + grep cd | wc : Considers cd as a string and can't be find. It appears after pressing Ctrl-D and prints the word count.
 + exit : It exists and there are no zombies.
 + ls | wc- : A 'No such file or directory' error is generated.
+
+### Other
+
+The answers that was "does not quit" was solved with the correcting of redirecting of files and there was a typo
+in pipes that resulted in some wrong outcomes.
