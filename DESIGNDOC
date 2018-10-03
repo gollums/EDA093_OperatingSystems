@@ -17,6 +17,8 @@ Albin Sjöstrand albinsj@student.chalmers.se
 >> Please cite any offline or online sources you consulted while
 >> preparing your submission, other than the Pintos documentation, course
 >> text, lecture notes, and course instructors.
+  >> The unix manual in bash (man) and online searches on various sites to
+     check what the commands should do in a working shell.
 
 			   COMMAND SHELL
 			   =============
@@ -29,9 +31,16 @@ which parts.
 
 >> L1: How many hours did each team member spend on this assignment?
    Make sure that each member's total time is listed.
+   >> We set days where we programmed together so that both could
+      understand what we were doing and if we had different ideas on
+      how to tackle the assignment. Total hours spent per person: 12. 
 
 >> L2: What did each team member focus on for this assignment?  Keep
    descriptions to 25-30 words or less.
+   >> We programmed as a pair so the tasks were not divided as such,
+      more than, for example, one found a solution for pipes while
+      the other one looked at how to solve the redirection of in and
+      out files.
 
 
 			  SURVEY QUESTIONS
@@ -45,6 +54,10 @@ penalized.  We can't fix things until we know about them.  :-)
 
 >> In your opinion, was this assignment, or any of the parts of it, too
 >> easy or too hard?  Did it take too long or too little time?
+  >> It was a quite different approach then we were used to in other
+     laborations, where it has been more of "step-by-step" instructions.
+     This resulted in that the start of the assignment went a bit slower
+     then we hoped.
 
 >> Did you find that working on a particular part of the assignment gave
 >> you greater insight into some aspect of OS design?
@@ -59,5 +72,7 @@ penalized.  We can't fix things until we know about them.  :-)
 >> Do you have any suggestions for the instructor and/or TAs to more
 >> effectively assist students, either for future quarters or the remaining
 >> projects?
+  >> Have more than one time to do the demonstration, because we had to wait
+     about 30 minutes after scheduled time. 
 
 >> Any other comments?
