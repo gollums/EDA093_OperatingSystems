@@ -18,36 +18,82 @@ Albin Sjöstrand <albsj@student.chalmers.se>
 >> Please cite any offline or online sources you consulted while
 >> preparing your submission, other than the Pintos documentation, course
 >> text, lecture notes, and course staff.
+   >> man in unix systems, the course book and also the documentation
+      for this lab that had clues on how to tackle the assigment.
+      Also googling to find what some error ment when compiling.
 
 			     ALARM CLOCK
 			     ===========
 
----- DATA STRUCTURES ----
+---- DATA STRUCTURES ---
 
 >> A1: Copy here the declaration of each new or changed `struct' or
 >> `struct' member, global or static variable, `typedef', or
 >> enumeration.  Identify the purpose of each in 25 words or less.
+   
+   struct thread
+  {
+    /* Owned by thread.c. */
+    tid_t tid;                          /* Thread identifier. */
+    enum thread_status status;          /* Thread state. */
+    char name[16];                      /* Name (for debugging purposes). */
+    uint8_t *stack;                     /* Saved stack pointer. */
+    int priority;                       /* Priority. */
+    struct list_elem allelem;           /* List element for all threads list. */
+    int64_t wakeup_time;                /* Time of how long until a thread's ready to wake up */
+    
+    /* Shared between thread.c and synch.c. */
+    struct list_elem elem;              /* List element. */
+
+#ifdef USERPROG
+    /* Owned by userprog/process.c. */
+    uint32_t *pagedir;                  /* Page directory. */
+#endif
+
+    /* Owned by thread.c. */
+    unsigned magic;                     /* Detects stack overflow. */
+};
+   
 
 ---- ALGORITHMS ----
 
 >> A2: Briefly describe what happens in a call to timer_sleep(),
 >> including the effects of the timer interrupt handler.
+   >> The current running thread is set and if the number of ticks
+      given is negative, it ignores it (negative time). Otherwise
+      a the current sleeping thread's wakeup time is set to the number
+      of ticks since the boot plus given sleep time. Then the thread
+      is blocked. 
+       
 
 >> A3: What steps are taken to minimize the amount of time spent in
 >> the timer interrupt handler?
+   >> It checks every thread if its is sleeping and ready to wake.
 
 ---- SYNCHRONIZATION ----
 
 >> A4: How are race conditions avoided when multiple threads call
 >> timer_sleep() simultaneously?
+   >> The interrupts are turn on to ensure the race conditions.
+      the method check_timer is called which checks thread status
+      and if the wakeuptime is positive. If the wakeup time
+      is the same set by timer_ticks() it unblocks the thread.
 
 >> A5: How are race conditions avoided when a timer interrupt occurs
 >> during a call to timer_sleep()?
+   >> When a thread is blocked, the interrupt is disabled because 
+   you're in a critical state where you don't want any change during.
 
 ---- RATIONALE ----
 
 >> A6: Why did you choose this design?  In what ways is it superior to
 >> another design you considered?
+   >> We didn't consider any design, this was the first code we got working.
+   In hindsight you might have wanted to have a sleep fucntion in thread.c 
+   that sets the sleep for a number of ticks, however this would have had 
+   the same functionality as ours, and it's easier to read when it's all in
+   one place. We let the threads be handled by an external interrupt handler
+   so the interrupts has to be turned off during critical sections.
 
 			    BATCH SCHEDULING
 			    ================
@@ -56,26 +102,55 @@ Albin Sjöstrand <albsj@student.chalmers.se>
 >> A1: Copy here the declaration of each new or changed `struct' or
 >> `struct' member, global or static variable, semaphore, `typedef', or
 >> enumeration.  Identify the purpose of each in 25 words or less.
+  >> struct lock thread_lock; 
+      A lock that locks the thread, controlls the access of the thread.
+   >> struct condition drive_condition[2][2]
+      A condition that contains what direction and if that
+      direction is available.
+   >> int open_slots;
+      The number of open slots for the thread to drive on. 
+   >> int currentDirection;
+      0 or 1, depending on the current direction.
 
 ---- SYNCHRONIZATION ----
 
 >> C1: How does your solution guarantee that no more that 3 tasks
 >> are using the bus in the same direction?
-
+   >> When the open slots are zero in getSlot() the threads are forced
+   to wait and also the lock is released.
+   
 >> C2: What prevents tasks from opposite directions from using the
 >> bus simultaneously?
+   >> We check if the current direction is different from a' tasks direction
+   whenever a bus tries to get a slot, and if it's true then the thead will 
+   wait and the lock will be released. On a empty bus, the task can enter
+   no matter the direction. 
+   
 
 >> C3: How does your solution grant priority to high priority tasks over
 >> the waiting tasks in the same direction?
+   >> We check if there are any high priority tasks in the same direction
+     in the waiting list as the current task on the bus, the current
+     task has to wait. When leaving a slot, if any priority tasks are 
+     waiting it signal that it can run (If any prio task want to run
+     in a different direction the bus has to be empty).
 
 >> C4: How do you guarantee that despite having priority, high priority
 >> tasks do not start using the bus while there are still still using
 >> it in the oposite direction?
+   >> If a high priority task want a slot it will check the current 
+   direction, after acquiring the lock, to know if it is the same
+   as it's own. If not, the thread will wait and the lock is released.
+   When leaving a slot, it's same as described in C3.
 
 ---- RATIONALE ----
 
 >> C6: Why did you choose this design? Did you consider other design 
 >> alternatives? In what ways is it superior to another design you considered?
+  >> It was based on the Old Bridge problem, since it's quite similar but our 
+  solution has priority logic. We got a comment during our lab that we unblock
+  threads that are waiting result from different thread, this could probably be
+  solved with sorting priorites after for example high, low and waiting for results.
 
 
 			   SURVEY QUESTIONS (optional)
@@ -99,5 +174,8 @@ the quarter.
 
 >> Do you have any suggestions for the TAs to more effectively assist
 >> students, either for future quarters?
+   We got different information for different TAs so it would be easier for
+   us that is's coordinated so we don't have to change our code back and forth.
+   It's quite frustratig. ./mood -passive -aggressive
 
 >> Any other comments?
