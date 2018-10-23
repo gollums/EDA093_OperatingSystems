@@ -27,7 +27,6 @@ typedef struct {
 
 struct lock thread_lock;
 struct condition drive_condition[2][2];
-int waiters[2];     
 int open_slots; // 0 <= open_slots <= BUS_CAPACITY
 int currentDirection;
 
